@@ -83,9 +83,8 @@ function App() {
   });
   const [uploadedImage, setUploadedImage] = useState(null);
 
-
   const onDrop = (acceptedFiles) => {
-    // Handle the dropped files here
+    
     const file = acceptedFiles[0];
     const reader = new FileReader();
     reader.onload = () => {
@@ -96,59 +95,81 @@ function App() {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: "image/*", // Accept only image files
+    accept: "image/*",  
   });
+
+  const handleResetFilters = ()=>{
+    setBlur({ ...blur, value: 0 });
+    // setBrightness({...brightness,value:0});
+    // setContrast({...contrast,value:0});
+    setGreyscale({...grayscale,value:0});
+    setSepia({ ...sepia, value: 0 });
+
+   
+  }
+
+  const handleResetImage =()=>{
+    setUploadedImage("")
+  }
 
   return (
     <>
       <div className="wrapper">
         <div className="row">
           <div className=" col-8 image-wrapper">
+            
             <div className="image mt-5 p-5">
-             
-            <div
-              {...getRootProps()}
-              style={{
-                width: "100%",
-                height: "300%",
-                border: "2px dashed #ccc",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <input {...getInputProps()} />
-              {uploadedImage ? (
-                <img
-                  src={uploadedImage}
-                  width="auto"
-                  height={500}
-                  alt="Uploaded"
-                  style={{
-                    filter: `${brightness.property}(${brightness.value}${brightness.unit}) ${contrast.property}(${contrast.value}${contrast.unit}) ${saturation.property}(${saturation.value}${saturation.unit}) ${sepia.property}(${sepia.value}${sepia.unit}) ${hueRotate.property}(${hueRotate.value}${hueRotate.unit}) ${blur.property}(${blur.value}${blur.unit})`,
-                  }}
-                />
-              ) : (
-
-                <>
-
-<p>Drop an image here or click here to upload file </p>
- 
-                </>
-              
-
-
-              )}
-            </div>
-             
-              
+              <div
+                {...getRootProps()}
+                style={{
+                  width: "100%",
+                  height: "300%",
+                  border: "2px dashed #ccc",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <input {...getInputProps()} />
+                {uploadedImage ? (
+                  <img
+                    src={uploadedImage}
+                    width="auto"
+                    height={500}
+                    alt="Uploaded"
+                    style={{
+                      filter: `${brightness.property}(${brightness.value}${brightness.unit})${grayscale.property}(${grayscale.value}${grayscale.unit}) ${contrast.property}(${contrast.value}${contrast.unit}) ${saturation.property}(${saturation.value}${saturation.unit}) ${sepia.property}(${sepia.value}${sepia.unit}) ${hueRotate.property}(${hueRotate.value}${hueRotate.unit}) ${blur.property}(${blur.value}${blur.unit})`,
+                    }}
+                  />
+                ) : (
+                  <>
+                    <p>Drop an image here or click here to upload file </p>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
           <div className="col-4 options mt-5 p-5">
-            <div className="mode">
-              <span>Brightness</span>
-              <input
+
+          <div  >
+              <button className="btn btn-primary me-2" onClick={handleResetImage}>
+                Reset Image
+              </button>
+
+              <button className="btn btn-primary" onClick={handleResetFilters}>
+                Reset Filters
+              </button>
+            </div>
+            <div className="mode mt-3 ">
+
+            <h3>Editor Controls</h3>
+
+
+              <span className="col-4 m">Brightness</span>
+              <br>
+              </br>
+              <input className="col-8"
                 type="range"
                 max={brightness.range.max}
                 min={brightness.range.min}
@@ -159,8 +180,9 @@ function App() {
             </div>
 
             <div className="mode">
-              <span>Contrast</span>
-              <input
+              <span className="col-4">Contrast</span>  <br>
+              </br>
+              <input className="col-8"
                 type="range"
                 max={contrast.range.max}
                 min={contrast.range.min}
@@ -171,8 +193,9 @@ function App() {
             </div>
 
             <div className="mode">
-              <span>Saturation</span>
-              <input
+              <span className="col-4">Saturation</span>  <br>
+              </br>
+              <input className="col-8"
                 type="range"
                 max={saturation.range.max}
                 min={saturation.range.min}
@@ -183,8 +206,22 @@ function App() {
             </div>
 
             <div className="mode">
-              <span>Sepia</span>
-              <input
+              <span className="col-4">Grayscale</span>  <br>
+              </br>
+              <input className="col-8"
+                type="range"
+                max={grayscale.range.max}
+                min={grayscale.range.min}
+                onChange={(e) => {
+                  setGreyscale({ ...grayscale, value: `${e.target.value}` });
+                }}
+              />
+            </div>
+
+            <div className="mode">
+              <span className="col-4">Sepia</span>  <br>
+              </br>
+              <input className="col-8"
                 type="range"
                 max={sepia.range.max}
                 min={sepia.range.min}
@@ -194,9 +231,12 @@ function App() {
               />
             </div>
 
+
+
             <div className="mode">
-              <span>Hue Rotate</span>
-              <input
+              <span className="col-4">Hue Rotate</span>  <br>
+              </br>
+              <input className="col-8"
                 type="range"
                 max={hueRotate.range.max}
                 min={hueRotate.range.min}
@@ -207,8 +247,9 @@ function App() {
             </div>
 
             <div className="mode">
-              <span>Blur</span>
-              <input
+              <span className="col-4">Blur</span>  <br>
+              </br>
+              <input className="col-8"
                 type="range"
                 max={blur.range.max}
                 min={blur.range.min}
@@ -218,17 +259,7 @@ function App() {
               />
             </div>
 
-            <div>
-              <button className="btn btn-primary" onClick={handleResetImage}>
-                Reset Image 
-
-              </button>
-
-              <button className="btn btn-primary" onClick={handleResetFilters}>
-                Reset Filters 
-
-              </button>
-            </div>
+           
           </div>
         </div>
       </div>
@@ -237,18 +268,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
- 
-
- 
- 
-
-
-
-  
