@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import "./App.css";
 import img from "./Image.jpeg";
+import { useDropzone } from "react-dropzone";
+import { Button } from "bootstrap";
 
 function App() {
   const [brightness, setBrightness] = useState({
@@ -79,6 +81,23 @@ function App() {
     },
     unit: "px",
   });
+  const [uploadedImage, setUploadedImage] = useState(null);
+
+
+  const onDrop = (acceptedFiles) => {
+    // Handle the dropped files here
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setUploadedImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: "image/*", // Accept only image files
+  });
 
   return (
     <>
@@ -86,15 +105,43 @@ function App() {
         <div className="row">
           <div className=" col-8 image-wrapper">
             <div className="image mt-5 p-5">
-              <img
-                src={img}
-                width="auto"
-                height={500}
-                alt=""
-                style={{
-                  filter: `${brightness.property}(${brightness.value}${brightness.unit}) ${contrast.property}(${contrast.value}${contrast.unit}) ${saturation.property}(${saturation.value}${saturation.unit}) ${sepia.property}(${sepia.value}${sepia.unit}) ${hueRotate.property}(${hueRotate.value}${hueRotate.unit}) ${blur.property}(${blur.value}${blur.unit})`,
-                }}
-              />
+             
+            <div
+              {...getRootProps()}
+              style={{
+                width: "100%",
+                height: "300%",
+                border: "2px dashed #ccc",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <input {...getInputProps()} />
+              {uploadedImage ? (
+                <img
+                  src={uploadedImage}
+                  width="auto"
+                  height={500}
+                  alt="Uploaded"
+                  style={{
+                    filter: `${brightness.property}(${brightness.value}${brightness.unit}) ${contrast.property}(${contrast.value}${contrast.unit}) ${saturation.property}(${saturation.value}${saturation.unit}) ${sepia.property}(${sepia.value}${sepia.unit}) ${hueRotate.property}(${hueRotate.value}${hueRotate.unit}) ${blur.property}(${blur.value}${blur.unit})`,
+                  }}
+                />
+              ) : (
+
+                <>
+
+<p>Drop an image here or click here to upload file </p>
+ 
+                </>
+              
+
+
+              )}
+            </div>
+             
+              
             </div>
           </div>
 
@@ -170,6 +217,18 @@ function App() {
                 }}
               />
             </div>
+
+            <div>
+              <button className="btn btn-primary" onClick={handleResetImage}>
+                Reset Image 
+
+              </button>
+
+              <button className="btn btn-primary" onClick={handleResetFilters}>
+                Reset Filters 
+
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -178,3 +237,18 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+ 
+
+ 
+ 
+
+
+
+  
