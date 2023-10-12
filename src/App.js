@@ -83,11 +83,13 @@ function App() {
   return (
     <>
       <div className="wrapper">
-        <div>
-          <div className="image-wrapper">
-            <div className="image">
+        <div className="row">
+          <div className=" col-8 image-wrapper">
+            <div className="image mt-5 p-5">
               <img
                 src={img}
+                width="auto"
+                height={500}
                 alt=""
                 style={{
                   filter: `${brightness.property}(${brightness.value}${brightness.unit}) ${contrast.property}(${contrast.value}${contrast.unit}) ${saturation.property}(${saturation.value}${saturation.unit}) ${sepia.property}(${sepia.value}${sepia.unit}) ${hueRotate.property}(${hueRotate.value}${hueRotate.unit}) ${blur.property}(${blur.value}${blur.unit})`,
@@ -96,7 +98,7 @@ function App() {
             </div>
           </div>
 
-          <div className="options">
+          <div className="col-4 options mt-5 p-5">
             <div className="mode">
               <span>Brightness</span>
               <input
