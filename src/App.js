@@ -5,6 +5,8 @@ import img from "./Image.jpeg";
 import { useDropzone } from "react-dropzone";
 import { Button } from "bootstrap";
 
+import { saveAs } from 'file-saver';
+
 function App() {
   const [brightness, setBrightness] = useState({
     name: "Brightness",
@@ -84,7 +86,6 @@ function App() {
   const [uploadedImage, setUploadedImage] = useState(null);
 
   const onDrop = (acceptedFiles) => {
-    
     const file = acceptedFiles[0];
     const reader = new FileReader();
     reader.onload = () => {
@@ -95,29 +96,36 @@ function App() {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: "image/*",  
+    accept: "image/*",
   });
 
-  const handleResetFilters = ()=>{
+  const handleResetFilters = () => {
     setBlur({ ...blur, value: 0 });
     // setBrightness({...brightness,value:0});
     // setContrast({...contrast,value:0});
-    setGreyscale({...grayscale,value:0});
+    setGreyscale({ ...grayscale, value: 0 });
     setSepia({ ...sepia, value: 0 });
+  };
 
-   
-  }
+  const handleResetImage = () => {
+    setUploadedImage("");
+  };
 
-  const handleResetImage =()=>{
-    setUploadedImage("")
-  }
+  const handleDownload = () => {
+    if (uploadedImage) {
+      fetch(uploadedImage)
+        .then((res) => res.blob())
+        .then((blob) => {
+          saveAs(blob, "edited_image.jpeg");
+        });
+    }
+  };
 
   return (
     <>
       <div className="wrapper">
         <div className="row">
           <div className=" col-8 image-wrapper">
-            
             <div className="image mt-5 p-5">
               <div
                 {...getRootProps()}
@@ -151,9 +159,11 @@ function App() {
           </div>
 
           <div className="col-4 options mt-5 p-5">
-
-          <div  >
-              <button className="btn btn-primary me-2" onClick={handleResetImage}>
+            <div>
+              <button
+                className="btn btn-primary me-2"
+                onClick={handleResetImage}
+              >
                 Reset Image
               </button>
 
@@ -162,14 +172,12 @@ function App() {
               </button>
             </div>
             <div className="mode mt-3 ">
-
-            <h3>Editor Controls</h3>
-
+              <h3>Editor Controls</h3>
 
               <span className="col-4 m">Brightness</span>
-              <br>
-              </br>
-              <input className="col-8"
+              <br></br>
+              <input
+                className="col-8"
                 type="range"
                 max={brightness.range.max}
                 min={brightness.range.min}
@@ -180,9 +188,9 @@ function App() {
             </div>
 
             <div className="mode">
-              <span className="col-4">Contrast</span>  <br>
-              </br>
-              <input className="col-8"
+              <span className="col-4">Contrast</span> <br></br>
+              <input
+                className="col-8"
                 type="range"
                 max={contrast.range.max}
                 min={contrast.range.min}
@@ -193,9 +201,9 @@ function App() {
             </div>
 
             <div className="mode">
-              <span className="col-4">Saturation</span>  <br>
-              </br>
-              <input className="col-8"
+              <span className="col-4">Saturation</span> <br></br>
+              <input
+                className="col-8"
                 type="range"
                 max={saturation.range.max}
                 min={saturation.range.min}
@@ -206,9 +214,9 @@ function App() {
             </div>
 
             <div className="mode">
-              <span className="col-4">Grayscale</span>  <br>
-              </br>
-              <input className="col-8"
+              <span className="col-4">Grayscale</span> <br></br>
+              <input
+                className="col-8"
                 type="range"
                 max={grayscale.range.max}
                 min={grayscale.range.min}
@@ -219,9 +227,9 @@ function App() {
             </div>
 
             <div className="mode">
-              <span className="col-4">Sepia</span>  <br>
-              </br>
-              <input className="col-8"
+              <span className="col-4">Sepia</span> <br></br>
+              <input
+                className="col-8"
                 type="range"
                 max={sepia.range.max}
                 min={sepia.range.min}
@@ -231,12 +239,10 @@ function App() {
               />
             </div>
 
-
-
             <div className="mode">
-              <span className="col-4">Hue Rotate</span>  <br>
-              </br>
-              <input className="col-8"
+              <span className="col-4">Hue Rotate</span> <br></br>
+              <input
+                className="col-8"
                 type="range"
                 max={hueRotate.range.max}
                 min={hueRotate.range.min}
@@ -247,9 +253,9 @@ function App() {
             </div>
 
             <div className="mode">
-              <span className="col-4">Blur</span>  <br>
-              </br>
-              <input className="col-8"
+              <span className="col-4">Blur</span> <br></br>
+              <input
+                className="col-8"
                 type="range"
                 max={blur.range.max}
                 min={blur.range.min}
@@ -259,7 +265,11 @@ function App() {
               />
             </div>
 
-           
+            <div className=" mt-3">
+              <button className="btn btn-primary" onClick={handleDownload}>
+                Download Image
+              </button>
+            </div>
           </div>
         </div>
       </div>
